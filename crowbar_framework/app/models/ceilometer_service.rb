@@ -42,10 +42,8 @@ class CeilometerService < ServiceObject
     nodes.delete_if { |n| n.nil? or n.admin? }
     
     agent_nodes = NodeObject.find("roles:nova-multi-compute")
-    agent_nodes.uniq!
 
-    collector_nodes = NodeObject.find("roles:nova-multi-controller")
-    cagent_nodes = NodeObject.find("roles:nova-multi-controller")
+    server_nodes = NodeObject.find("roles:nova-multi-controller")
         
     base["attributes"][@bc_name]["git_instance"] = ""
     begin
@@ -84,9 +82,9 @@ class CeilometerService < ServiceObject
     end
     
     base["deployment"]["ceilometer"]["elements"] = {
-        "ceilometer-server" =>  collector_nodes.map { |x| x.name },
         "ceilometer-agent" =>  agent_nodes.map { |x| x.name },
-        "ceilometer-cagent" =>  cagent_nodes.map { |x| x.name }	
+        "ceilometer-cagent" =>  server_nodes.map { |x| x.name },
+        "ceilometer-server" =>  server_nodes.map { |x| x.name }
     } unless nodes.nil? or nodes.length ==0
 
     base[:attributes][:ceilometer][:service][:token] = '%012d' % rand(1e12)
