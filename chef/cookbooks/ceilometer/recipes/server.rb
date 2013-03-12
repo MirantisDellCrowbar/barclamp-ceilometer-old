@@ -59,6 +59,26 @@ end
 
 include_recipe "#{@cookbook_name}::common"
 
+keystone_register "register ceilometer user" do
+  host keystone_address
+  port keystone_admin_port
+  token keystone_token
+  user_name keystone_service_user
+  user_password keystone_service_password
+  tenant_name keystone_service_tenant
+  action :add_user
+end
+
+keystone_register "give ceilometer user access" do
+  host keystone_address
+  port keystone_admin_port
+  token keystone_token
+  user_name keystone_service_user
+  tenant_name keystone_service_tenant
+  role_name "admin"
+  action :add_access
+end
+
 # Create ceilometer service
 ceilometer_register "register ceilometer service" do
   host my_ipaddress
