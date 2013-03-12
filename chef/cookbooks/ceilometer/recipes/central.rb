@@ -20,9 +20,7 @@ unless node[:ceilometer][:use_gitrepo]
 else
   ceilometer_path = "/opt/ceilometer"
   pfs_and_install_deps("ceilometer")
-  link_service ceilometer-agent-central do
-    bin_name "ceilometer-agent-central"
-  end
+  link_service "ceilometer-agent-central"
   create_user_and_dirs(ceilometer-agent-central) 
   execute "cp_policy.json" do
     command "cp #{ceilometer_path}/etc/policy.json /etc/ceilometer"
