@@ -24,22 +24,22 @@ if node[:ceilometer][:sql_engine] == "mysql"
     Chef::Log.info("Mysql server found at #{mysql_address}")
     
     # Create the Ceilometer Database
-#    mysql_database "create #{node[:ceilometer][:db][:database]} database" do
-#        host    mysql_address
-#        username "db_maker"
-#        password mysql[:mysql][:db_maker_password]
-#        database node[:ceilometer][:db][:database]
-#        action :create_db
-#    end
+    mysql_database "create #{node[:ceilometer][:db][:database]} database" do
+        host    mysql_address
+        username "db_maker"
+        password mysql[:mysql][:db_maker_password]
+        database node[:ceilometer][:db][:database]
+        action :create_db
+    end
 
-#    mysql_database "create database user" do
-#        host    mysql_address
-#        username "db_maker"
-#        password mysql[:mysql][:db_maker_password]
-#        database node[:ceilometer][:db][:database]
-#        action :query
-#        sql "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER on #{node[:ceilometer][:db][:database]}.* to '#{node[:ceilometer][:db][:user]}'@'%' IDENTIFIED BY '#{node[:ceilometer][:db][:password]}';"
-#    end
+    mysql_database "create database user" do
+        host    mysql_address
+        username "db_maker"
+        password mysql[:mysql][:db_maker_password]
+        database node[:ceilometer][:db][:database]
+        action :query
+        sql "GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER on #{node[:ceilometer][:db][:database]}.* to '#{node[:ceilometer][:db][:user]}'@'%' IDENTIFIED BY '#{node[:ceilometer][:db][:password]}';"
+    end
     sql_connection = "mysql://#{node[:ceilometer][:db][:user]}:#{node[:ceilometer][:db][:password]}@#{mysql_address}/#{node[:ceilometer][:db][:database]}"
 elsif node[:ceilometer][:sql_engine] == "sqlite"
     Chef::Log.info("Configuring Ceilometer to use SQLite backend")
