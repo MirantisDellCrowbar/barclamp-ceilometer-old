@@ -19,7 +19,7 @@ unless node[:ceilometer][:use_gitrepo]
   end
 else
   ceilometer_path = "/opt/ceilometer"
-  pfs_and_install_deps(ceilometer-agent-central)
+  pfs_and_install_deps("ceilometer")
   link_service ceilometer-agent-central do
     bin_name "ceilometer-agent-central"
   end
