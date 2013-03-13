@@ -91,6 +91,9 @@ keystone_service_user = node[:glance][:service_user]
 keystone_service_password = node[:glance][:service_password]
 Chef::Log.info("Keystone server found at #{keystone_address}")
 
+db_hosts = search(:node, "roles:ceilometer-server")
+db_host = db_hosts.name
+
 template "/etc/ceilometer/ceilometer.conf" do
     source "ceilometer.conf.erb"
     mode "0644"
@@ -110,7 +113,8 @@ template "/etc/ceilometer/ceilometer.conf" do
       :keystone_service_user => keystone_service_user,
       :keystone_service_password => keystone_service_password,
       :keystone_service_tenant => keystone_service_tenant,
-      :keystone_admin_port => keystone_admin_port
+      :keystone_admin_port => keystone_admin_port,
+      :db_host => db_host
     )
     notifies :restart, resources(:service => "ceilometer-collector"), :immediately
 end
